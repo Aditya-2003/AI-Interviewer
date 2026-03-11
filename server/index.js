@@ -36,7 +36,7 @@ main().then(() => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("/dashboard");
+  res.send("Welcome to the AI Interviewer API");
 });
 
 // --- User Authentication Routes ---
