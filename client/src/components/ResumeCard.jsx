@@ -10,7 +10,7 @@ export default function ResumeCard() {
   async function fetchResume() {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_URL}/resume`,
+      `/api/resume`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -55,7 +55,7 @@ export default function ResumeCard() {
       
 
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/resume/upload`,
+        `/api/resume/upload`,
         {
           method: "POST",
           headers: {

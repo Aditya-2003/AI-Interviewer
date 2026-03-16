@@ -30,7 +30,7 @@ export default function NewInterview() {
       setError("");
 
       const response = await fetch(
-        `${import.meta.env.VITE_URL}/interview/start`,
+        `/api/interview/start`,
         {
           method: "POST",
           

@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect( () => {
     async function fetchUserInfo() {
       try{
-        const url = `${import.meta.env.VITE_URL}/users/me`;
+        const url = `/api/users/me`;
         const response = await fetch(url, {
           method: "GET",
           headers: {
