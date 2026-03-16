@@ -15,7 +15,7 @@ export default function ApiKeyCard() {
   // helper for loading the key from the server
   async function fetchApiKey() {
     try {
-      const response = await fetch("http://localhost:8080/api/users/api-key", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/users/api-key`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export default function ApiKeyCard() {
 
   const handleSave = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8080/api/users/api-key", {
+    const response = await fetch(`${import.meta.env.VITE_URL}/users/api-key`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

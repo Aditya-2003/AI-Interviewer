@@ -20,7 +20,7 @@ const startInterview = async (req, res) => {
     let firstQuestion;
     try {
       firstQuestion = await generateFirstQuestion(role, experience, resumeText, apiKey);
-      console.log("Generated first question:", firstQuestion);
+      // console.log("Generated first question:", firstQuestion);
     } catch (err) {
       console.error("AI generation failed:", err);
       return res.status(502).json({ error: "AI provider error. Please verify your API key and try again." });

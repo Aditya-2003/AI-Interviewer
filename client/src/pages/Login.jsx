@@ -25,7 +25,7 @@ const Login = () => {
     setError("");
 
     try {
-      const url = "http://localhost:8080/api/users/login";
+      const url = `${import.meta.env.VITE_URL}/users/login`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

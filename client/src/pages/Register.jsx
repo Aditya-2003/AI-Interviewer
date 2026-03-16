@@ -37,7 +37,7 @@ const Register = () => {
 
         setError("");
         try {
-            const url = "http://localhost:8080/api/users/register";
+            const url = `${import.meta.env.VITE_URL}/users/register`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {

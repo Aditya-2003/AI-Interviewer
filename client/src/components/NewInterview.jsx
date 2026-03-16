@@ -11,6 +11,8 @@ const ROLES = [
   'Mobile Developer',
   'Data Engineer',
   'ML Engineer',
+  'Business Analyst',
+  'HRMS Analyst'
 ]
 
 const EXPERIENCE = ['Fresher', 'Junior', 'Mid', 'Senior']
@@ -28,7 +30,7 @@ export default function NewInterview() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:8080/api/interview/start",
+        `${import.meta.env.VITE_URL}/interview/start`,
         {
           method: "POST",
           
