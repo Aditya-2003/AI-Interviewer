@@ -16,13 +16,14 @@ const Dashboard = () => {
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("token");
     setTimeout(() => {
-      navigate('/login');
+      navigate('/');
     }, 1000);
   }
   
   useEffect( () => {
     async function fetchUserInfo() {
       try{
+        // const url = `/api/users/me`;
         const url = `/api/users/me`;
         const response = await fetch(url, {
           method: "GET",

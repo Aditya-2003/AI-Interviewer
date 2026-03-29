@@ -171,7 +171,6 @@ export default function InterviewPage() {
     const navigate = useNavigate()
     const bottomRef = useRef(null)
     const token = localStorage.getItem("token");
-    const API = import.meta.env.VITE_API_URL;
 
     const [interview, setInterview] = useState(null)
     const [messages, setMessages] = useState([])
@@ -256,7 +255,7 @@ export default function InterviewPage() {
 
 
         try {
-            const url = `${API}/api/interview/message`;
+            const url = `/api/interview/message`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {

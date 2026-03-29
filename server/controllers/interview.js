@@ -23,7 +23,7 @@ const startInterview = async (req, res) => {
       // console.log("Generated first question:", firstQuestion);
     } catch (err) {
       console.error("AI generation failed:", err);
-      return res.status(502).json({ error: "AI provider error. Please verify your API key and try again." });
+      return res.status(502).json({ error: "AI provider error. Please verify your API key and try again.", details: err.message });
     }
 
     const session = await InterviewSession.create({

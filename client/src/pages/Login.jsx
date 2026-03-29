@@ -41,7 +41,7 @@ const Login = () => {
 
         setSuccess("Login successful!");
         localStorage.setItem("token", token);
-        localStorage.setItem("loggedInUser", username);
+        localStorage.setItem("loggedInUser", JSON.stringify({ username }));
         setTimeout(() => {
           navigate(`/dashboard`);
         }, 1000);

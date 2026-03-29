@@ -52,7 +52,7 @@ const Register = () => {
             if (success) {
 
                 localStorage.setItem("token", token);
-                localStorage.setItem("loggedInUser", username);
+                localStorage.setItem("loggedInUser", JSON.stringify({ username }));
                 
                 setSuccess("Registration successful!");
                 
