@@ -12,107 +12,102 @@ async function generateInterviewFeedback(
     .map(msg => `${msg.role.toUpperCase()}: ${msg.content}`)
     .join("\n");
 
-  const prompt = `ROLE:
-You are a senior software engineering interviewer responsible for evaluating a candidate after a technical interview.
+  const prompt = ` ROLE:
+You are a senior software engineering interviewer evaluating a candidate after a technical interview.
 
 CONTEXT:
-The candidate applied for the following role.
-
 Role: ${role}
 Experience Level: ${experienceLevel}
 
-You also have access to the candidate's resume and the full interview conversation.
-
 Candidate Resume:
-${resumeText.slice(0,2000)}
+${resumeText.slice(0, 2000)}
 
 Interview Conversation:
 ${conversationText}
 
 TASK:
-Evaluate the candidate's performance based ONLY on the interview conversation above.
+Evaluate the candidate strictly based on the interview conversation.
 
-Your evaluation must be evidence-based.
-Only make statements that are supported by something the candidate said in the conversation.
+IMPORTANT RULES:
 
-Do NOT assume weaknesses or strengths that were not demonstrated in the interview.
+* ONLY use evidence from the conversation.
+* DO NOT assume anything not said.
+* DO NOT hallucinate strengths or weaknesses.
+* If evidence is missing, explicitly state it.
+* Keep evaluation objective and specific.
+* Avoid generic statements.
 
-If you mention a strength or weakness, reference the part of the interview that supports your statement.
+EVALUATION CRITERIA:
 
-If there is insufficient evidence for a weakness, explicitly say:
-"No clear weakness observed in the interview conversation."
+1. Technical Knowledge
+   Evaluate understanding of technologies, tools, and concepts relevant to the role.
 
-EVALUATION AREAS:
+2. Problem Solving Ability
+   Evaluate how the candidate approached problems, reasoning, and decision-making.
 
-1. Technical Knowledge (Score out of 10)
-Evaluate the candidate’s understanding of technologies, tools, and technical concepts relevant to the role.
-
-2. Problem Solving Ability (Score out of 10)
-Evaluate how the candidate approached problems, handled scenarios, considered trade-offs, and reasoned about solutions.
-
-3. Communication Clarity (Score out of 10)
-Evaluate how clearly the candidate explained ideas, structured answers, and communicated technical concepts.
+3. Communication Clarity
+   Evaluate clarity, structure, and ability to explain ideas.
 
 4. Strengths
-List strengths demonstrated in the interview.
-Each strength must reference something the candidate said or explained.
+   List only strengths demonstrated in the conversation. Each must be evidence-based.
 
 5. Weaknesses
-List weaknesses ONLY if they are clearly supported by the interview conversation.
-If weaknesses are mentioned, briefly reference the part of the conversation that demonstrates the issue.
+   List weaknesses ONLY if clearly supported by the conversation.
+   If no clear weaknesses exist, return an empty array.
 
-If no clear weaknesses are observed, state:
-"No clear weaknesses were demonstrated during the interview."
+6. Suggestions
+   Provide practical, actionable improvements based on weaknesses.
 
-6. Suggestions for Improvement
-Provide realistic and practical suggestions for improvement based on the weaknesses observed.
+7. Recommendation
+   Choose ONE:
 
-7. Hiring Recommendation
-Choose ONE:
+* Strong Hire
+* Hire
+* Borderline
+* No Hire
 
-- Strong Hire
-- Hire
-- Borderline
-- No Hire
+Must include reasoning based on evidence.
 
-Your recommendation must be justified using evidence from the interview conversation.
+OUTPUT FORMAT (STRICT JSON ONLY — NO TEXT OUTSIDE JSON):
 
-CONSTRAINTS:
-- Base the evaluation strictly on the interview conversation.
-- Do not hallucinate missing details.
-- Do not invent weaknesses or strengths.
-- Reference candidate answers when making claims.
-- Keep the evaluation objective and professional.
-- Avoid generic statements.
+{
+"technical": {
+"score": number (0-10),
+"explanation": "string"
+},
+"problemSolving": {
+"score": number (0-10),
+"explanation": "string"
+},
+"communication": {
+"score": number (0-10),
+"explanation": "string"
+},
+"strengths": [
+"string",
+"string"
+],
+"weaknesses": [
+"string",
+"string"
+],
+"suggestions": [
+"string",
+"string"
+],
+"recommendation": {
+"decision": "Strong Hire | Hire | Borderline | No Hire",
+"reason": "string"
+}
+}
 
-OUTPUT FORMAT:
+CRITICAL:
 
-Technical Knowledge: X/10
-Explanation: ...
-
-Problem Solving Ability: X/10
-Explanation: ...
-
-Communication Clarity: X/10
-Explanation: ...
-
-Strengths:
-- ...
-- ...
-
-Weaknesses:
-- ...
-- ...
-OR
-No clear weaknesses were demonstrated during the interview.
-
-Suggestions for Improvement:
-- ...
-- ...
-
-Final Recommendation:
-...
-Reasoning: ...`;
+* Return ONLY valid JSON.
+* Do NOT wrap in markdown.
+* Do NOT add explanations outside JSON.
+* Ensure JSON is parsable by JavaScript (JSON.parse).
+`;
 
   try {
 
@@ -147,7 +142,12 @@ Reasoning: ...`;
       throw new Error("AI returned empty feedback");
     }
 
-    return feedback.trim();
+    try {
+      return JSON.parse(feedback.trim());
+    } catch (err) {
+      console.error("Invalid JSON from AI:", feedback);
+      throw new Error("AI returned invalid JSON");
+    }
 
   } catch (err) {
     console.error("AI feedback generation failed:", err?.response?.data || err.message);

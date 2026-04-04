@@ -1,8 +1,9 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink,Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, KeyRound, FileText, MessageSquare,
   Settings, LogOut, Cpu,
 } from 'lucide-react'
+import { BsRobot } from "react-icons/bs";
 
 const NAV_ITEMS = [
   { to: '/dashboard',   label: 'Dashboard', icon: LayoutDashboard },
@@ -28,11 +29,14 @@ export default function Sidebar() {
     <aside className="flex flex-col w-64 shrink-0 bg-[#0f1117] border-r border-white/5 min-h-screen">
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 h-16 border-b border-white/5">
-        <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-          <Cpu className="w-4 h-4 text-white" />
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-900/50 group-hover:bg-indigo-500 transition-colors">
+            <BsRobot className="w-5 h-5 text-white" />
+          </div>
+          <span className="font-bold text-white tracking-tight text-base">InterviewAI</span>
+        </Link>
         </div>
-        <span className="font-bold text-white text-base tracking-tight">InterviewAI</span>
-      </div>
+      
 
       {/* Nav links */}
       <nav className="flex-1 px-3 py-5 space-y-1">

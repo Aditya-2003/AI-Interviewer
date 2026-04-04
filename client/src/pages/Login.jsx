@@ -1,6 +1,7 @@
 import { Alert } from '@mui/material';
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import {BsRobot} from "react-icons/bs";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -77,9 +78,7 @@ const Login = () => {
         {/* Logo / Title */}
         <div className="text-center mb-8">
           <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.591 2.25l4.532 1.813M14.25 3.104c.251.023.501.05.75.082M19.5 14.5l-4.532-1.813" />
-            </svg>
+            <BsRobot className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">InterviewAI</h1>
           <p className="text-gray-400 text-sm mt-1">Sign in to your account</p>

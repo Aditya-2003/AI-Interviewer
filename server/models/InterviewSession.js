@@ -44,7 +44,8 @@ const interviewSessionSchema = new mongoose.Schema({
   },
 
   feedback: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
+    default: null
   }
 
 }, { timestamps: true });

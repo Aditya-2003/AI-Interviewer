@@ -84,7 +84,6 @@ Hi, thanks for being here. Could you start by introducing yourself and telling m
         )
 
         const question = response?.data?.choices?.[0]?.message?.content
-        console.log("AI response:", question)
 
         if (!question) {
             throw new Error("AI returned empty response")

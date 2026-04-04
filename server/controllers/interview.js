@@ -67,9 +67,20 @@ const sendMessage = async (req, res) => {
 
     // Check if Session Ended
     if (session.status === "completed") {
+      // Ensure feedback is an object (parse if it's a string)
+      let feedback = session.feedback;
+      if (feedback && typeof feedback === 'string') {
+        try {
+          feedback = JSON.parse(feedback);
+        } catch (err) {
+          console.error("Failed to parse feedback:", err);
+          feedback = null;
+        }
+      }
+      
       return res.status(400).json({
         interviewCompleted: true,
-        feedback: session.feedback
+        feedback: feedback
       });
     }
 
@@ -105,7 +116,7 @@ const sendMessage = async (req, res) => {
       return res.json({
         interviewCompleted: true,
         status: "completed",
-        feedback
+        feedback: feedback
       });
 
     } else {
@@ -152,17 +163,29 @@ const getInterviewSession = async (req, res) => {
       return res.status(403).json({ error: "Forbidden" });
     }
 
+    // Ensure feedback is an object (parse if it's a string)
+    let feedback = session.feedback;
+    if (feedback && typeof feedback === 'string') {
+      try {
+        feedback = JSON.parse(feedback);
+      } catch (err) {
+        console.error("Failed to parse feedback:", err);
+        feedback = null;
+      }
+    }
+
     res.json({
       role: session.role,
       experienceLevel: session.experience,
       status: session.status,
       conversation: session.conversation,
-      feedback: session.feedback
+      feedback: feedback
     });
 
   } catch (err) {
+    console.error("Error in getInterviewSession:", err);
     res.status(500).json({ error: "Failed to fetch session" });
   }
-}
+};
 
 module.exports = { startInterview, sendMessage, getInterviewSession };

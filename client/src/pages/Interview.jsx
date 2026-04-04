@@ -8,7 +8,16 @@ function InterviewHeader({ interview }) {
 
     return (
         <div className="shrink-0 bg-[#0f1117] border-b border-white/6 px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            {/* Back button row */}
+                <div className="flex items-center gap-4">
+            <div className="shrink-0 ">
+                <button
+                    onClick={() => navigate('/dashboard')}
+                    className="flex items-center  text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+            </div>
                 <div>
                     <h1 className="text-base font-semibold text-white">
                         {interview?.role ?? 'Interview'} Interview
@@ -138,22 +147,70 @@ function AnswerInput({ value, onChange, onSend, loading, disabled }) {
 //  Feedback Panel 
 
 function FeedbackPanel({ feedback, onDashboard }) {
+    if (!feedback) return null;
+
+    // Parse feedback if it's a string
+    let parsedFeedback = feedback;
+    if (typeof feedback === 'string') {
+        try {
+            parsedFeedback = JSON.parse(feedback);
+        } catch (err) {
+            console.error("Failed to parse feedback:", err);
+            return (
+                <div className="bg-[#0f1117] min-h-screen px-6 py-10 text-white flex items-center justify-center">
+                    <div className="text-center space-y-4">
+                        <p className="text-red-400 text-sm">Error displaying feedback</p>
+                        <button
+                            onClick={onDashboard}
+                            className="text-indigo-400 hover:text-indigo-300 text-sm underline"
+                        >
+                            Back to Dashboard
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    }
+
     return (
-        <div className="shrink-0 bg-[#0f1117] border-t border-white/6 px-6 py-6">
-            <div className="max-w-3xl mx-auto">
+        <div className="bg-[#0f1117] min-h-screen px-6 py-10 text-white">
+            <div className="max-w-5xl mx-auto space-y-8">
 
-                <h2 className="text-white font-semibold text-lg mb-4">
-                    Interview Feedback
-                </h2>
+                {/* Header */}
+                <h1 className="text-2xl font-bold">Interview Feedback</h1>
 
-                <div className="bg-[#1c1f2e] border border-white/10 rounded-xl p-5 text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
-                    {feedback}
+                {/* Score Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <ScoreCard title="Technical" data={parsedFeedback.technical} />
+                    <ScoreCard title="Problem Solving" data={parsedFeedback.problemSolving} />
+                    <ScoreCard title="Communication" data={parsedFeedback.communication} />
                 </div>
 
-                <div className="flex justify-center mt-6">
+                {/* Strengths & Weaknesses */}
+                <div className="grid md:grid-cols-2 gap-6">
+                    <ListCard title="Strengths" items={parsedFeedback.strengths || []} color="green" />
+                    <ListCard title="Weaknesses" items={parsedFeedback.weaknesses || []} color="red" />
+                </div>
+
+                {/* Suggestions */}
+                <ListCard title="Suggestions for Improvement" items={parsedFeedback.suggestions || []} color="blue" />
+
+                {/* Final Recommendation */}
+                <div className="bg-[#1c1f2e] border border-white/10 rounded-xl p-6">
+                    <h2 className="text-lg font-semibold mb-2">Final Recommendation</h2>
+                    <p className="text-xl font-bold text-indigo-400">
+                        {parsedFeedback.recommendation?.decision || 'Pending'}
+                    </p>
+                    <p className="text-sm text-slate-300 mt-2">
+                        {parsedFeedback.recommendation?.reason || 'No details available'}
+                    </p>
+                </div>
+
+                {/* Button */}
+                <div className="flex justify-center">
                     <button
                         onClick={onDashboard}
-                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+                        className="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg"
                     >
                         Back to Dashboard
                     </button>
@@ -161,7 +218,54 @@ function FeedbackPanel({ feedback, onDashboard }) {
 
             </div>
         </div>
-    )
+    );
+}
+
+function ScoreCard({ title, data }) {
+    if (!data) {
+        return (
+            <div className="bg-[#1c1f2e] border border-white/10 rounded-xl p-5">
+                <h3 className="text-sm text-slate-400">{title}</h3>
+                <p className="text-3xl font-bold text-slate-600">—</p>
+                <p className="text-sm text-slate-400 mt-2">No data available</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-[#1c1f2e] border border-white/10 rounded-xl p-5">
+            <h3 className="text-sm text-slate-400">{title}</h3>
+            <p className="text-3xl font-bold text-indigo-400">{data.score ?? '—'}/10</p>
+            <p className="text-sm text-slate-300 mt-2">{data.explanation || 'No details'}</p>
+        </div>
+    );
+}
+
+function ListCard({ title, items, color }) {
+    const colorMap = {
+        green: "text-green-400",
+        red: "text-red-400",
+        blue: "text-blue-400"
+    };
+
+    const itemsArray = Array.isArray(items) ? items : [];
+
+    return (
+        <div className="bg-[#1c1f2e] border border-white/10 rounded-xl p-5">
+            <h3 className={`font-semibold mb-3 ${colorMap[color]}`}>
+                {title}
+            </h3>
+            {itemsArray.length === 0 ? (
+                <p className="text-sm text-slate-400 italic">None identified</p>
+            ) : (
+                <ul className="space-y-2 text-sm text-slate-300">
+                    {itemsArray.map((item, i) => (
+                        <li key={i}>• {item}</li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 }
 
 // ─── Main Page ──────────────────────────────────────────────────────────────
@@ -379,16 +483,6 @@ export default function InterviewPage() {
     // ── Main interview screen ──
     return (
         <div className="flex flex-col h-screen bg-[#0a0c12]">
-            {/* Back button row */}
-            <div className="shrink-0 px-4 pt-3 pb-0">
-                <button
-                    onClick={() => navigate('/dashboard')}
-                    className="flex items-center gap-1.5 text-slate-500 hover:text-slate-300 text-xs transition-colors"
-                >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    Back to Dashboard
-                </button>
-            </div>
 
             {/* Header */}
             <InterviewHeader interview={interview} />
