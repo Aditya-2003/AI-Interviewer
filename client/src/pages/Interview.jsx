@@ -186,7 +186,7 @@ export default function InterviewPage() {
     useEffect(() => {
         const loadSession = async () => {
             try {
-                const url = `${API}/api/interview/${sessionId}`;
+                const url = `/api/interview/${sessionId}`;
                 const response = await fetch(url, {
                     method: "GET",
                     headers: {

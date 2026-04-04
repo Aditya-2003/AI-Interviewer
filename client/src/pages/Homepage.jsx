@@ -409,12 +409,12 @@ function Footer() {
             <a key={l} href="#" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">{l}</a>
           ))}
           <a
-            href="https://github.com"
+            href="https://github.com/Aditya-2003/AI-Interviewer"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-500 hover:text-slate-300 transition-colors"
+            className="text-slate-500 hover:text-slate-300 transition-colors text-sm"
           >
-            <Github className="w-4 h-4" />
+            Github
           </a>
         </div>
 
